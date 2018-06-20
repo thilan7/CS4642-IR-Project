@@ -22,6 +22,6 @@ class DinaminaSpider(scrapy.Spider):
         category = response.xpath(    ".//div[@class='field field-name-field-section field-type-taxonomy-term-reference field-label-hidden']/descendant::text()").extract()
         context = response.xpath(    ".//div[@class='field field-name-body field-type-text-with-summary field-label-hidden']/descendant::text()").extract()
         tags = response.xpath(    ".//div[@class='field field-name-field-articletags field-type-taxonomy-term-reference field-label-above']/descendant::text()").extract()[1:]
-        relatedNews = response.xpath(    ".//div[@class='field field-name-field-related-content field-type-node-reference field-label-above']/descendant::text()").extract()[1:]
+        relatedNews = response.xpath(    ".//div[@class='field field-name-field-related-content field-type-node-reference field-label-above']/div/div/a/@href").extract()
         yield {'URL': ''.join(url), 'Title': ''.join(title), 'Date': ''.join(date), 'Author(s)': ''.join(authors),'Category': ''.join(category), 'Context': ''.join(context), 'Tags': ''.join(tags),'RelatedNews': ''.join(relatedNews)}
 
