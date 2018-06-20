@@ -15,7 +15,13 @@ class DinaminaSpider(scrapy.Spider):
             yield response.follow(older_posts, callback=self.parse)
 
     def parse_article(self, response):
-        content = response.xpath(".//div[@class='field-item even']/descendant::text()").extract()
-        author = response.xpath(".//div[@class='field field-name-field-author-s- field-type-node-reference field-label-hidden']/descendant::text()").extract()
-        yield {'author(s)': ''.join(author),'article': ''.join(content)}
+        url = response.url
+        title = response.css("#page-title::text").extract()
+        date = response.css(".date-display-single::text").extract()
+        authors = response.xpath(    ".//div[@class='field field-name-field-author-s- field-type-node-reference field-label-hidden']/descendant::text()").extract()
+        category = response.xpath(    ".//div[@class='field field-name-field-section field-type-taxonomy-term-reference field-label-hidden']/descendant::text()").extract()
+        context = response.xpath(    ".//div[@class='field field-name-body field-type-text-with-summary field-label-hidden']/descendant::text()").extract()
+        tags = response.xpath(    ".//div[@class='field field-name-field-articletags field-type-taxonomy-term-reference field-label-above']/descendant::text()").extract()[1:]
+        relatedNews = response.xpath(    ".//div[@class='field field-name-field-related-content field-type-node-reference field-label-above']/descendant::text()").extract()[1:]
+        yield {'URL': ''.join(url), 'Title': ''.join(title), 'Date': ''.join(date), 'Author(s)': ''.join(authors),'Category': ''.join(category), 'Context': ''.join(context), 'Tags': ''.join(tags),'RelatedNews': ''.join(relatedNews)}
 
